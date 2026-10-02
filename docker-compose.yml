@@ -1,0 +1,19 @@
+services:
+  mongo:
+    image: mongo:6
+    ports: ["27017:27017"]
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+  gateway:
+    build: ./services/gateway
+    ports: ["3000:3000"]
+    depends_on: [catalog, orders]
+  catalog:
+    build: ./services/catalog
+    ports: ["3001:3001"]
+    depends_on: [mongo, redis]
+  orders:
+    build: ./services/orders
+    ports: ["3002:3002"]
+    depends_on: [mongo]
